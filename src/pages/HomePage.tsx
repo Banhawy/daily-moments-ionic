@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        Go to <IonRouterLink routerLink="/settings">Settings</IonRouterLink>
+        This is the home page...
       </IonContent>
     </IonPage>
   );
