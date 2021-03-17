@@ -13,6 +13,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
+import EntryPage from './pages/EntryPage';
 
 const App: React.FC = () => {
   return (
@@ -20,16 +21,19 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/home">
+            <Route exact path="/entries">
               <HomePage />
             </Route>
             <Route exact path="/settings">
               <SettingsPage />
             </Route>
-            <Redirect exact path="/" to="/home" />
+            <Route exact path="/entries/:id">
+              <EntryPage />
+            </Route>
+            <Redirect exact path="/" to="/entries" />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            <IonTabButton tab="home" href="/home">
+            <IonTabButton tab="home" href="/entries">
               <IonIcon icon={homeIcon} />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
