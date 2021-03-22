@@ -17,7 +17,7 @@ import EntryPage from './pages/EntryPage';
 import LoginPage from './pages/LoginPage';
 
 const App: React.FC = () => {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(true)
   console.log(`logged in status: ${loggedIn}`)
   return (
     <IonApp>
@@ -28,23 +28,23 @@ const App: React.FC = () => {
               <LoginPage loggedIn={loggedIn}
                 onLogin={() => setLoggedIn(true)} />
             </Route>
-            <Route exact path="/entries">
+            <Route exact path="/my/entries">
               {loggedIn ? <HomePage /> : <Redirect to="/login" />}
             </Route>
-            <Route exact path="/settings">
+            <Route exact path="/my/settings">
               <SettingsPage />
             </Route>
-            <Route exact path="/entries/:id">
+            <Route exact path="/my/entries/:id">
               <EntryPage />
             </Route>
-            <Redirect exact path="/" to="/entries" />
+            <Redirect exact path="/" to="/my/entries" />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            <IonTabButton tab="home" href="/entries">
+            <IonTabButton tab="home" href="/my/entries">
               <IonIcon icon={homeIcon} />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="settings" href="/settings">
+            <IonTabButton tab="settings" href="/my/settings">
               <IonIcon icon={settingsIcon} />
               <IonLabel>Settings</IonLabel>
             </IonTabButton>
