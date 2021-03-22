@@ -1,10 +1,10 @@
 import {
-  IonApp, 
-  IonIcon, 
-  IonLabel, 
-  IonRouterOutlet, 
-  IonTabBar, 
-  IonTabButton, 
+  IonApp,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -25,9 +25,8 @@ const App: React.FC = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/login">
-              {!loggedIn ? 
-                <LoginPage onLogin={() => setLoggedIn(true)}/> :
-                <Redirect to="/entries" />}
+              <LoginPage loggedIn={loggedIn}
+                onLogin={() => setLoggedIn(true)} />
             </Route>
             <Route exact path="/entries">
               {loggedIn ? <HomePage /> : <Redirect to="/login" />}

@@ -7,12 +7,17 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import React from 'react';
+import { Redirect } from 'react-router';
 
 interface LoggedInProps {
-  onLogin: () => void
+  loggedIn: boolean;
+  onLogin: () => void;
 }
 
-const LoginPage: React.FC<LoggedInProps> = ({ onLogin }) => {
+const LoginPage: React.FC<LoggedInProps> = ({ loggedIn, onLogin }) => {
+  if (loggedIn) {
+    return <Redirect to="/entries" />
+  }
   return (
     <IonPage>
       <IonHeader>
