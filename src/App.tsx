@@ -9,6 +9,7 @@ import AppTabs from './AppTabs';
 import { AuthContext } from './auth';
 import NotFoundPage from './pages/NotFoundPage';
 import { auth } from './firebase';
+import RegisterPage from './pages/RegisterPage';
 
 
 
@@ -31,6 +32,9 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path="/login">
               <LoginPage />
+            </Route>
+            <Route exact path="/register">
+              <RegisterPage />
             </Route>
             <Route path="/my">
               <AppTabs />
