@@ -6,7 +6,9 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonLoading,
   IonPage,
+  IonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
@@ -24,12 +26,19 @@ const LoginPage: React.FC<LoggedInProps> = ({ onLogin }) => {
   const { loggedIn } = useAuth()
   const [email, setEmail] = useState<string | null | undefined>('');
   const [password, setPassword] = useState<string | null | undefined>('');
-  
+  const [status, setStatus] = useState({ loading: false, error: false });
+
   const handleLogin = async () => {
     if (email && password) {
-      const credentials = await auth.signInWithEmailAndPassword(email, password)
-      console.log('credentials: ', credentials)
-      onLogin();
+      try {
+        setStatus({ loading: true, error: false });
+        const credentials = await auth.signInWithEmailAndPassword(email, password)
+        console.log('credentials: ', credentials)
+        onLogin();
+      } catch (error) {
+        setStatus({ loading: false, error: true });
+        console.log(error)
+      }
     }
   }
 
@@ -49,16 +58,20 @@ const LoginPage: React.FC<LoggedInProps> = ({ onLogin }) => {
             <IonLabel position="stacked">Email</IonLabel>
             <IonInput type="email" value={email}
               onIonChange={event => setEmail(event.detail.value)}
-             />
+            />
           </IonItem>
           <IonItem>
             <IonLabel position="stacked">Password</IonLabel>
             <IonInput type="password" value={password}
               onIonChange={event => setPassword(event.detail.value)}
-             />
+            />
           </IonItem>
         </IonList>
+        {status.error &&
+          <IonText color="danger">Invalid Credentials</IonText>
+        }
         <IonButton expand="block" onClick={handleLogin}>Login</IonButton>
+        <IonLoading isOpen={status.loading} />
       </IonContent>
     </IonPage>
   );
