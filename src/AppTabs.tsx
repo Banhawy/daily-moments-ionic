@@ -14,6 +14,7 @@ import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
 import EntryPage from './pages/EntryPage';
 import { useAuth } from './auth';
+import AddEntryPage from './pages/AddEntryPage';
 
 
 const AppTabs: React.FC = () => {
@@ -33,6 +34,9 @@ const AppTabs: React.FC = () => {
           </Route>
           <Route exact path="/my/entries/:id">
             <EntryPage />
+          </Route>
+          <Route exact path="/my/entries/add">
+            <AddEntryPage />
           </Route>
           <Redirect exact path="/" to="/my/entries" />
         </IonRouterOutlet>
