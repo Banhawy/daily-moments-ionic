@@ -1,16 +1,37 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
   IonPage,
+  IonTextarea,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import { useAuth } from '../auth';
+import { firestore } from "../firebase";
 
 const AddEntryPage: React.FC = () => {
-  console.log('AddEntry rendered')
+  const { userId } = useAuth();
+  const history = useHistory();
+  const [title, setTitle] = useState<string | null | undefined>('');
+  const [description, setDescription] = useState<string | null | undefined>('');
+
+  const handleSave = async () => {
+    const entriesRef = firestore.collection('users').doc(userId)
+      .collection('entries');
+      const entryData = { title, description };
+      const entryRef = await entriesRef.add(entryData);
+      console.log('saved!', entryRef.id)
+      history.goBack();
+  }
   return (
     <IonPage>
       <IonHeader>
@@ -22,7 +43,19 @@ const AddEntryPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        TODO
+        <IonList>
+          <IonItem>
+            <IonLabel position="stacked">Title</IonLabel>
+            <IonInput value={title}
+              onIonChange={(event) => setTitle(event.detail.value)} />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">Description</IonLabel>
+            <IonTextarea value={description}
+              onIonChange={(event) => setDescription(event.detail.value)} />
+          </IonItem>
+          <IonButton expand="block" onClick={handleSave}>Save</IonButton>
+        </IonList>
       </IonContent>
     </IonPage>
   );
