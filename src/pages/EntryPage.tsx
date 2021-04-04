@@ -1,14 +1,17 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonPage,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
+import { trash } from 'ionicons/icons';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useAuth } from '../auth';
 import { firestore } from '../firebase';
 import { Entry, toEntry } from '../models';
@@ -19,6 +22,7 @@ interface RouteParams {
 
 const EntryPage: React.FC = () => {
   const { userId } = useAuth();
+  const history = useHistory();
   const { id } = useParams<RouteParams>();
   const [entry, setEntry] = useState<Entry>();
   useEffect(() => {
@@ -27,6 +31,12 @@ const EntryPage: React.FC = () => {
     entryRef.get().then((doc) => setEntry(toEntry(doc)))
   }, [userId, id])
 
+  const handleDelete = async () => {
+    const entryRef = firestore.collection('users').doc(userId)
+      .collection('entries').doc(id);
+      await entryRef.delete();
+      history.goBack();
+  }
 
   return (
     <IonPage>
@@ -36,6 +46,11 @@ const EntryPage: React.FC = () => {
             <IonBackButton />
           </IonButtons>
           <IonTitle>{entry?.title}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={handleDelete}>
+              <IonIcon icon={trash} slot="icon-only" />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
