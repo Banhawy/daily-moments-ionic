@@ -13,6 +13,7 @@ import { trash } from 'ionicons/icons';
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useAuth } from '../auth';
+import { formateDate } from '../date';
 import { firestore } from '../firebase';
 import { Entry, toEntry } from '../models';
 
@@ -38,6 +39,24 @@ const EntryPage: React.FC = () => {
       history.goBack();
   }
 
+  if (!entry) {
+    return (
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonBackButton />
+            </IonButtons>
+            <IonTitle>Invalid Entry</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <h2>Error retrieving entry...</h2>
+        </IonContent>
+      </IonPage>
+    )
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -45,7 +64,7 @@ const EntryPage: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton />
           </IonButtons>
-          <IonTitle>{entry?.title}</IonTitle>
+          <IonTitle>{formateDate(entry.date)}</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={handleDelete}>
               <IonIcon icon={trash} slot="icon-only" />
@@ -54,7 +73,8 @@ const EntryPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <p>{entry?.description}</p>
+        <h2>{entry.title}</h2>
+        <p>{entry.description}</p>
       </IonContent>
     </IonPage>
   );
