@@ -5,6 +5,7 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonLabel,
   IonList,
   IonPage,
   IonTitle,
@@ -15,6 +16,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../auth';
 import { firestore } from '../firebase';
 import { Entry, toEntry } from '../models';
+
+function formateDate(isoString: string) {
+  return new Date(isoString).toLocaleDateString('en-US', {
+    day: 'numeric', month: 'short', year: 'numeric'
+  });
+}
 
 const HomePage: React.FC = () => {
   const { userId } = useAuth();
@@ -36,7 +43,10 @@ const HomePage: React.FC = () => {
           {entries.map(entry =>
             <IonItem button key={entry.id}
               routerLink={`/my/entries/${entry.id}`}>
-              {entry.title}
+                <IonLabel>
+                  <h2>{formateDate(entry.date)}</h2>
+                  <h3>{entry.title}</h3>
+                </IonLabel>
             </IonItem>
           )}
         </IonList>
