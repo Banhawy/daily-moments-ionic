@@ -14,7 +14,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAuth } from '../auth';
 import { firestore } from "../firebase";
@@ -26,6 +26,14 @@ const AddEntryPage: React.FC = () => {
   const [title, setTitle] = useState<string | null | undefined>('');
   const [description, setDescription] = useState<string | null | undefined>('');
   const [pictureUrl, setPictureUrl] = useState('/assets/placeholder.png');
+
+  useEffect(() => {
+    return () => {
+      if (pictureUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(pictureUrl);
+      }
+    }
+  }, [pictureUrl])
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
