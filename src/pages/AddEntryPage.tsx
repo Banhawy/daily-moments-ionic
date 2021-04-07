@@ -14,7 +14,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAuth } from '../auth';
 import { firestore } from "../firebase";
@@ -26,6 +26,8 @@ const AddEntryPage: React.FC = () => {
   const [title, setTitle] = useState<string | null | undefined>('');
   const [description, setDescription] = useState<string | null | undefined>('');
   const [pictureUrl, setPictureUrl] = useState('/assets/placeholder.png');
+  
+  const fileInputRef = useRef<any>();
 
   useEffect(() => {
     return () => {
@@ -79,9 +81,11 @@ const AddEntryPage: React.FC = () => {
           <IonItem>
             <IonLabel position="stacked">Picture</IonLabel>
             <br />
-            <input type="file" accept="image/*" 
+            <input type="file" accept="image/*" hidden ref={fileInputRef}
               onChange={handleFileChange} />
-            <img src={pictureUrl}  alt="" />
+            <img src={pictureUrl}  alt=""  style={{ cursor: 'pointer' }}
+              onClick={() => fileInputRef.current.click()}
+            />
           </IonItem>
           <IonItem>
             <IonLabel position="stacked">Description</IonLabel>
