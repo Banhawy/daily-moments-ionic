@@ -14,10 +14,12 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
+import { CameraResultType, Plugins } from '@capacitor/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAuth } from '../auth';
 import { firestore, storage } from "../firebase";
+const { Camera } = Plugins;
 
 async function savePicture(blobUrl: string, userId: string) {
   const pictureRef = storage.ref(`/users/${userId}/${Date.now()}`);
@@ -56,6 +58,18 @@ const AddEntryPage: React.FC = () => {
         setPictureUrl(pictureUrl);
       }
     }
+  }
+
+  const handlePictureClick = async () => {
+    // fileInputRef.current.click();
+    const photo = await Camera.getPhoto({
+      resultType: CameraResultType.Uri
+    })
+
+    if (photo.webPath) {
+      setPictureUrl(photo.webPath)
+    }
+
   }
 
   const handleSave = async () => {
@@ -97,7 +111,7 @@ const AddEntryPage: React.FC = () => {
             <input type="file" accept="image/*" hidden ref={fileInputRef}
               onChange={handleFileChange} />
             <img src={pictureUrl}  alt=""  style={{ cursor: 'pointer' }}
-              onClick={() => fileInputRef.current.click()}
+              onClick={handlePictureClick}
             />
           </IonItem>
           <IonItem>
