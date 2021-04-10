@@ -38,7 +38,7 @@ const AddEntryPage: React.FC = () => {
   const [title, setTitle] = useState<string | null | undefined>('');
   const [description, setDescription] = useState<string | null | undefined>('');
   const [pictureUrl, setPictureUrl] = useState('/assets/placeholder.png');
-  
+
   const fileInputRef = useRef<any>();
 
   useEffect(() => {
@@ -62,26 +62,30 @@ const AddEntryPage: React.FC = () => {
 
   const handlePictureClick = async () => {
     // fileInputRef.current.click();
-    const photo = await Camera.getPhoto({
-      resultType: CameraResultType.Uri
-    })
+    try {
+      const photo = await Camera.getPhoto({
+        resultType: CameraResultType.Uri
+      })
 
-    if (photo.webPath) {
-      setPictureUrl(photo.webPath)
+      if (photo.webPath) {
+        setPictureUrl(photo.webPath)
+      }
+    } catch (error) {
+      console.log('Camera error:', error);
     }
-
   }
 
   const handleSave = async () => {
     const entriesRef = firestore.collection('users').doc(userId)
       .collection('entries');
-      const entryData = { date, title, pictureUrl, description };
-      if (pictureUrl.startsWith('blob:') && userId) {
-        entryData.pictureUrl = await savePicture(pictureUrl, userId);
-      }
-      const entryRef = await entriesRef.add(entryData);
-      console.log('saved!', entryRef.id)
-      history.goBack();
+    const entryData = { date, title, pictureUrl, description };
+    // make sure that the image is not the placeholder image 
+    if (!pictureUrl.startsWith('/assets') && userId) {
+      entryData.pictureUrl = await savePicture(pictureUrl, userId);
+    }
+    const entryRef = await entriesRef.add(entryData);
+    console.log('saved!', entryRef.id)
+    history.goBack();
   }
   return (
     <IonPage>
@@ -110,7 +114,7 @@ const AddEntryPage: React.FC = () => {
             <br />
             <input type="file" accept="image/*" hidden ref={fileInputRef}
               onChange={handleFileChange} />
-            <img src={pictureUrl}  alt=""  style={{ cursor: 'pointer' }}
+            <img src={pictureUrl} alt="" style={{ cursor: 'pointer' }}
               onClick={handlePictureClick}
             />
           </IonItem>
