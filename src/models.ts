@@ -3,6 +3,7 @@ export interface Entry {
     date: string;
     title: string;
     description: string;
+    pictureUrl: string;
 }
 
 export function toEntry(doc: firebase.default.firestore.DocumentSnapshot): Entry {
